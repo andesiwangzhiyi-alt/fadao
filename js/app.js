@@ -49,7 +49,7 @@ function reviewDue(){
 }
 
 /* ---------- 视图路由 ---------- */
-const VIEWS=['dashboard','practice','daily','exam','wrongbook','more'];
+const VIEWS=['dashboard','practice','daily','exam','wrongbook','laws','more'];
 function switchTab(v){VIEWS.forEach(x=>{$$(`.tab[data-view="${x}"]`)[0].classList.toggle('active',x===v);});renderView(v);}
 function renderView(v){
   $('#streakBadge').innerHTML=`🔥 <b>${streakDays()}</b>天`;
@@ -58,7 +58,25 @@ function renderView(v){
   else if(v==='daily')renderDaily();
   else if(v==='exam')renderExamConfig();
   else if(v==='wrongbook')renderWrong();
+  else if(v==='laws')renderLaws();
   else if(v==='more')renderMore();
+}
+
+/* ============ 法条库 ============ */
+function renderLaws(q){
+  const kw=(q||'').trim();
+  const laws=typeof LAW_BANK!=='undefined'?LAW_BANK:[];
+  let flat=[];
+  laws.forEach(l=>{(l.sections||[]).forEach(s=>{if(s.content)flat.push({law:l.title,title:s.title,content:s.content,id:s.id});});});
+  const show=kw?flat.filter(f=>f.content.includes(kw)||f.title.includes(kw)||f.law.includes(kw)):flat.slice(0,40);
+  $('#view').innerHTML=`
+  <div class="card"><h3><span class="dot"></span>权威法条库</h3>
+    <div class="muted mb10">共 ${laws.length} 部领域 ${flat.length} 条法规章节（宪法/民法典/刑法/刑诉/民诉/行政法/商法，含核心司法解释）。输入关键词或法条号检索。</div>
+    <div class="field"><input id="lawSearch" placeholder="🔍 检索法条（如：正当防卫 / 民法典 第1254条）" value="${esc(kw)}" oninput="renderLaws(this.value)"></div>
+    <div class="muted mt8">${kw?`找到 ${show.length} 条`:'显示前 40 条'}</div>
+  </div>
+  ${show.slice(0,50).map(f=>`<div class="sl-item"><div class="sl-title"><span>📜 ${f.law} · ${f.title}</span></div>
+    <div class="sl-body law-body">${esc(f.content).slice(0,500)}${f.content.length>500?'…':''}</div></div>`).join('')}`;
 }
 
 /* ============ 首页 ============ */
@@ -517,6 +535,7 @@ window.pick=pick;window.confirmPick=confirmPick;window.nextQ=nextQ;window.prevQ=
 window.finishQuiz=finishQuiz;window.startQuiz=startQuiz;window.quickStart=quickStart;window.startModPractice=startModPractice;window.markMastered=markMastered;
 window.renderWrongByMod=renderWrongByMod;window.renderExamConfig=renderExamConfig;
 window.renderExamCustom=renderExamCustom;window.examCustom=examCustom;window.examQuick=examQuick;
+window.renderLaws=renderLaws;
 window.exportData=exportData;window.importData=importData;window.confirmReset=confirmReset;
 window.openUrl=(u)=>{window.open(u,'_blank');};
 window.toggleReview=toggleReview;window.pomoToggle=pomoToggle;window.pomoReset=pomoReset;
