@@ -130,6 +130,7 @@ input,textarea,select{font-family:inherit;font-size:14px}
 .sl-item{background:var(--card);border-radius:12px;padding:12px 14px;margin-bottom:10px;box-shadow:var(--shadow);border-left:3px solid var(--gold)}
 .sl-item .sl-title{font-weight:600;font-size:14px;display:flex;justify-content:space-between;align-items:center}
 .sl-item .sl-body{font-size:13.5px;color:var(--ink-2);margin-top:4px;white-space:pre-wrap}
+.law-body{max-height:300px;overflow-y:auto;background:var(--navy-3);border-radius:10px;padding:10px;font-size:12.5px;color:var(--ink)}
 .sl-item.fav{border-left-color:var(--red)}
 .star{color:#bbb;font-size:16px}
 .star.on{color:var(--gold)}
